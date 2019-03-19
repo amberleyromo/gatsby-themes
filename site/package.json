@@ -1,0 +1,8 @@
+{
+  "name": "site",
+  "version": "0.0.1",
+  "description": "A podcast site",
+  "main": "gatsby-config.js",
+  "license": "MIT",
+  "private": true
+}

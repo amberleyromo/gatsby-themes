@@ -4,5 +4,13 @@
   "description": "A podcast site",
   "main": "gatsby-config.js",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "develop": "gatsby develop",
+    "build": "gatsby build"
+  },
+  "dependencies": {
+    "gatsby": "^2.1.38",
+    "gatsby-theme-podcast": "*"
+  }
 }

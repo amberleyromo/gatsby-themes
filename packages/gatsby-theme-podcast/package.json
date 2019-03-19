@@ -3,5 +3,15 @@
   "version": "0.0.1",
   "description": "A Gatsby theme for podcast sites",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gatsby": "^2.1.38",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  },
+  "peerDependencies": {
+    "gatsby": "^2.1.38",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  }
 }

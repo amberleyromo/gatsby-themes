@@ -1,1 +1,1 @@
-export { default as Description } from "./Description";
+export { default as Intro } from "./Intro";

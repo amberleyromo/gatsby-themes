@@ -41,6 +41,8 @@ module.exports = {
         path: "content"
       }
     },
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     {
       resolve: "gatsby-plugin-typography",
       options: {

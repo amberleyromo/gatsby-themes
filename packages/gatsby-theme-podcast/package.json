@@ -4,6 +4,19 @@
   "description": "A Gatsby theme for podcast sites",
   "main": "index.js",
   "license": "MIT",
+  "dependencies": {
+    "@mdx-js/mdx": "^0.20.3",
+    "@mdx-js/tag": "^0.20.3",
+    "gatsby-mdx": "^0.4.3",
+    "gatsby-plugin-page-creator": "^2.0.10",
+    "gatsby-plugin-typography": "^2.2.10",
+    "gatsby-source-filesystem": "^2.0.27",
+    "react-typography": "^0.16.19",
+    "typeface-merriweather": "^0.0.72",
+    "typeface-montserrat": "^0.0.54",
+    "typography": "^0.16.19",
+    "typography-theme-wordpress-2016": "^0.16.19"
+  },
   "devDependencies": {
     "gatsby": "^2.1.38",
     "react": "^16.8.4",

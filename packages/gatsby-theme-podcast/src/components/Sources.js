@@ -23,7 +23,7 @@ const Sources = () => (
       const metaData = data.site.siteMetadata;
       const lastSource = metaData.sources.length - 1;
       return (
-        <p>
+        <p style={{ textAlign: "center" }}>
           {metaData.sources.map((source, idx) => {
             return (
               <Fragment key={source.name}>

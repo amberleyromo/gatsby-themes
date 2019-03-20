@@ -4,7 +4,7 @@ import get from "lodash/get";
 
 import { MDXRenderer } from "gatsby-mdx";
 import Layout from "../components/Layout";
-// import Support from "../components/Support";
+import Support from "../components/Support";
 // import SEO from "../components/SEO";
 // import Footer from "../components/Footer";
 // import { formatReadingTime } from "../utils/helpers";
@@ -28,9 +28,9 @@ class EpisodePageTemplate extends React.Component {
           description={episode.frontmatter.description}
           slug={episode.fields.slug}
           embedUrl={episode.frontmatter.embedUrl}
-        />
+        /> */}
 
-        <Support /> */}
+        <Support />
 
         {
           <iframe
@@ -48,15 +48,6 @@ class EpisodePageTemplate extends React.Component {
         <blockquote>{episode.frontmatter.description}</blockquote>
 
         <MDXRenderer>{episode.code.body}</MDXRenderer>
-
-        <h2>Credits</h2>
-        <p>
-          Hosted by <a href="https://twitter.com/nayafia">Nadia Eghbal</a> and{" "}
-          <a href="https://twitter.com/left_pad">Henry Zhu</a>. <br />
-          Edited by <a href="https://twitter.com/left_pad">Henry Zhu</a>. <br />
-          Cover art by Jessica Han. <br />
-          Music by <a href="https://twitter.com/ken_wheeler">Ken Wheeler</a>.
-        </p>
 
         <p>
           <a href={discussUrl} target="_blank" rel="noopener noreferrer">

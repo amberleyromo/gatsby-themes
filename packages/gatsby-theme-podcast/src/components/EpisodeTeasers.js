@@ -13,7 +13,7 @@ const query = graphql`
           id
           frontmatter {
             title
-            date
+            date(formatString: "MMMM DD, YYYY")
             time
             description
           }

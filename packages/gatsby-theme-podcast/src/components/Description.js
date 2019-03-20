@@ -1,14 +1,25 @@
-import React from "react";
-// import PropTypes from 'prop-types';
+import React, { Fragment } from "react";
+import { StaticQuery, graphql } from "gatsby";
+import { MDXRenderer } from "gatsby-mdx";
 
-import Description from "../../content/fragments/Description.mdx";
+const query = graphql`
+  query getDescription {
+    mdx(fileAbsolutePath: { regex: "/content/fragments/description/" }) {
+      id
+      code {
+        body
+      }
+    }
+  }
+`;
 
-const ShowDescription = () => {
-  return (
-    <div>
-      <Description />
-    </div>
-  );
-};
+const PodcastDescription = () => (
+  <StaticQuery
+    query={query}
+    render={data => {
+      return <MDXRenderer>{data.mdx.code.body}</MDXRenderer>;
+    }}
+  />
+);
 
-export default ShowDescription;
+export default PodcastDescription;

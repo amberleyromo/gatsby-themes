@@ -32,6 +32,12 @@ module.exports = {
         name: "GitHub",
         url: "https://github.com/hzoo/hopeinsource.com"
       }
+    ],
+    // Tweet ids
+    praise: [
+      `1059181425184755713`,
+      `1052646871154548738`,
+      `1053342917014753281`
     ]
   },
   plugins: [

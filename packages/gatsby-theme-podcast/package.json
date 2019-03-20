@@ -14,6 +14,7 @@
     "gatsby-plugin-typography": "^2.2.10",
     "gatsby-source-filesystem": "^2.0.27",
     "gatsby-transformer-sharp": "^2.1.17",
+    "react-twitter-embed": "^2.0.7",
     "react-typography": "^0.16.19",
     "typeface-merriweather": "^0.0.72",
     "typeface-montserrat": "^0.0.54",

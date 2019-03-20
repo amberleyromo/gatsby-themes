@@ -8,9 +8,7 @@ const query = graphql`
   query getFeatureImage {
     allFile(
       filter: {
-        relativePath: {
-          regex: "content/assets/feature-image.(jpe?g|png|gif|bmp)/"
-        }
+        relativePath: { regex: "assets/feature-image.(jpe?g|png|gif|bmp)/" }
       }
     ) {
       edges {

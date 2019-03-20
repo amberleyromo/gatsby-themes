@@ -1,83 +1,43 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { StaticQuery, graphql } from "gatsby";
 
 const query = graphql`
-  query getFeeds {
+  query getSources {
     site {
       siteMetadata {
         gitOrg
         siteUrl
-        feed {
-          rss
-          google
-          apple
-          spotify
+        sources {
+          name
+          url
         }
       }
     }
   }
 `;
 
-// @TODO make this iterable instead of static
-const FeedSources = () => (
+const Sources = () => (
   <StaticQuery
     query={query}
     render={data => {
+      const metaData = data.site.siteMetadata;
+      const lastSource = metaData.sources.length - 1;
       return (
-        <StaticQuery
-          query={query}
-          render={data => {
-            const metaData = data.site.siteMetadata;
+        <p>
+          {metaData.sources.map((source, idx) => {
             return (
-              <p>
-                <a
-                  href={metaData.feed.google}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Google
-                </a>{" "}
-                &bull;{" "}
-                <a
-                  href={metaData.feed.apple}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Apple
-                </a>{" "}
-                &bull;{" "}
-                <a
-                  href={metaData.feed.spotify}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Spotify
-                </a>{" "}
-                &bull;{" "}
-                <a
-                  href={metaData.feed.rss}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  RSS
-                </a>{" "}
-                &bull;{" "}
-                <a
-                  href={`https://github.com/${metaData.gitOrg}/${
-                    metaData.siteUrl
-                  }`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub
+              <Fragment key={source.name}>
+                <a href={source.url} target="_blank" rel="noopener noreferrer">
+                  {source.name}
                 </a>
-              </p>
+                {idx !== lastSource && <span> &bull; </span>}
+              </Fragment>
             );
-          }}
-        />
+          })}
+        </p>
       );
     }}
   />
 );
 
-export default FeedSources;
+export default Sources;

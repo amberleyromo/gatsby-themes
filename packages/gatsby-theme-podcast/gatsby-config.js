@@ -1,14 +1,14 @@
+const pkg = require("./package.json");
+
 module.exports = {
   siteMetadata: {
-    title:
-      "Hope in Source — A podcast about faith and open source — with Nadia Eghbal & Henry Zhu",
-    author: "Nadia Eghbal & Henry Zhu",
-    description:
-      "What are the parallels between faith and open source software? Join Nadia and Henry for an off-the-cuff conversation between friends.",
-    gitOrg: "hzoo",
-    siteUrl: "hopeinsource.com",
+    title: "The podcast title",
+    author: "Jane Doe & John Doe",
+    description: "Description of the show.",
+    gitOrg: "GitHub org name for the podcast site",
+    siteUrl: "yoursiteurl.com",
     social: {
-      twitter: "@left_pad"
+      twitter: "@yourshowhandle"
     },
     sources: [
       {
@@ -41,6 +41,16 @@ module.exports = {
     ]
   },
   plugins: [
+    /*
+     * We need to make sure that Webpack processes this theme as ES6, so we add
+     * this plugin and specify the package name in `modules`.
+     */
+    {
+      resolve: "gatsby-plugin-compile-es6-packages",
+      options: {
+        modules: [pkg.name]
+      }
+    },
     // Load the local files only to create the content schema & load theme
     // demo content.
     {

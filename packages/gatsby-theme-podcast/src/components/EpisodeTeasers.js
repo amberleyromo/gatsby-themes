@@ -5,7 +5,12 @@ const query = graphql`
   query getEpisodes {
     allMdx(
       sort: { fields: [frontmatter___date, frontmatter___title], order: DESC }
-      filter: { fileAbsolutePath: { regex: "/episodes/" } }
+      filter: {
+        fields: {
+          source: { in: ["podcast-demo-episodes", "podcast-episodes"] }
+          slug: { ne: null }
+        }
+      }
       limit: 1000
     ) {
       edges {

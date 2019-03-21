@@ -5,7 +5,12 @@ const Promise = require("bluebird");
 const _ = require("lodash");
 
 exports.onPreBootstrap = ({ reporter }) => {
-  const dirs = ["content", "content/episodes", "content/fragments"];
+  const dirs = [
+    "content",
+    "content/episodes",
+    "content/fragments",
+    "content/assets"
+  ];
 
   dirs.forEach(dir => {
     if (!fs.existsSync(dir)) {
@@ -29,7 +34,12 @@ exports.createPages = ({ graphql, actions }) => {
                 fields: [frontmatter___date, frontmatter___title]
                 order: DESC
               }
-              filter: { fileAbsolutePath: { regex: "/episodes/" } }
+              filter: {
+                fields: {
+                  source: { in: ["podcast-demo-episodes", "podcast-episodes"] }
+                  slug: { ne: null }
+                }
+              }
               limit: 1000
             ) {
               edges {
@@ -58,6 +68,7 @@ exports.createPages = ({ graphql, actions }) => {
             index === episodes.length - 1 ? null : episodes[index + 1].node;
           const next = index === 0 ? null : episodes[index - 1].node;
 
+          console.log("CREATING PAGE:", episode.node.fields.slug);
           createPage({
             path: episode.node.fields.slug,
             component: episodePage,
@@ -73,18 +84,45 @@ exports.createPages = ({ graphql, actions }) => {
   });
 };
 
+let userCreatedOwnEpisodes = false;
+
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
 
-  if (
-    node.internal.type === `Mdx` &&
-    node.fileAbsolutePath.includes(`/episodes/`)
-  ) {
-    const value = path.parse(node.fileAbsolutePath).name;
+  if (node.internal.type === `Mdx`) {
+    // create source field
+    const fileNode = getNode(node.parent);
+
+    const source = fileNode.sourceInstanceName;
+
     createNodeField({
-      name: `slug`,
       node,
-      value
+      name: `source`,
+      value: source
     });
+
+    const eligibleEpisodeSources = [
+      "podcast-demo-episodes",
+      "podcast-episodes"
+    ];
+
+    if (eligibleEpisodeSources.includes(source)) {
+      if (source === "podcast-episodes") {
+        console.log("user has created own episodes!");
+        userCreatedOwnEpisodes = true;
+      }
+
+      if (userCreatedOwnEpisodes && source === "podcast-demo-episodes") {
+        return;
+      }
+
+      // create slug for episode pages
+      const value = path.parse(node.fileAbsolutePath).name;
+      createNodeField({
+        name: `slug`,
+        node,
+        value
+      });
+    }
   }
 };

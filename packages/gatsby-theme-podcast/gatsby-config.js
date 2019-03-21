@@ -51,26 +51,46 @@ module.exports = {
         modules: [pkg.name]
       }
     },
-    // Load the local files only to create the content schema & load theme
-    // demo content.
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        name: "theme-demo-content",
-        path: `${__dirname}/content`
+        name: "podcast-episodes",
+        path: "content/episodes"
       }
     },
-
-    /*
-     * Load the `content` directory to load from the content folder
-     * of the site using this theme. This is where the actual content will be
-     * loaded from for creating pages.
-     */
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        name: "site-content",
-        path: "content"
+        name: "podcast-demo-episodes",
+        path: `${__dirname}/content/episodes`
+      }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "podcast-fragments",
+        path: "content/fragments"
+      }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "podcast-demo-fragments",
+        path: `${__dirname}/content/fragments`
+      }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "podcast-assets",
+        path: "content/assets"
+      }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "podcast-demo-assets",
+        path: `${__dirname}/content/assets`
       }
     },
     `gatsby-plugin-sharp`,

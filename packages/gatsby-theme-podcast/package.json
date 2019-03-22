@@ -1,6 +1,6 @@
 {
   "name": "gatsby-theme-podcast",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Gatsby theme for podcast sites",
   "main": "index.js",
   "license": "MIT",

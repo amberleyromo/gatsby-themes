@@ -5,8 +5,7 @@ import get from "lodash/get";
 import { MDXRenderer } from "gatsby-mdx";
 import Layout from "../components/Layout";
 import Support from "../components/Support";
-// import SEO from "../components/SEO";
-// import Footer from "../components/Footer";
+import SEO from "../components/SEO";
 // import { formatReadingTime } from "../utils/helpers";
 import { rhythm } from "../utils/typography";
 
@@ -23,12 +22,12 @@ class EpisodePageTemplate extends React.Component {
     )}`;
     return (
       <Layout location={this.props.location} title={siteMetadata.title}>
-        {/* <SEO
+        <SEO
           title={episode.frontmatter.title}
           description={episode.frontmatter.description}
           slug={episode.fields.slug}
           embedUrl={episode.frontmatter.embedUrl}
-        /> */}
+        />
 
         <Support />
 

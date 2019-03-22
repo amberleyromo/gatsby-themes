@@ -1,4 +1,3 @@
-const { createFilePath } = require(`gatsby-source-filesystem`);
 const fs = require("fs");
 const path = require("path");
 const Promise = require("bluebird");
@@ -68,7 +67,6 @@ exports.createPages = ({ graphql, actions }) => {
             index === episodes.length - 1 ? null : episodes[index + 1].node;
           const next = index === 0 ? null : episodes[index - 1].node;
 
-          console.log("CREATING PAGE:", episode.node.fields.slug);
           createPage({
             path: episode.node.fields.slug,
             component: episodePage,
@@ -108,7 +106,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     if (eligibleEpisodeSources.includes(source)) {
       if (source === "podcast-episodes") {
-        console.log("user has created own episodes!");
         userCreatedOwnEpisodes = true;
       }
 

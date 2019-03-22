@@ -22,7 +22,8 @@ module.exports = {
       },
       {
         name: "Apple",
-        url: "https://itunes.apple.com/us/podcast/hope-in-source/id1437677655"
+        url: "https://itunes.apple.com/us/podcast/hope-in-source/id1437677655",
+        appId: 1437677655
       },
       {
         name: "Spotify",

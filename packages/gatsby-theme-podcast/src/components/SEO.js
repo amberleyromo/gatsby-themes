@@ -53,16 +53,11 @@ function SEO({ meta, image, title, description, slug, embedUrl }) {
             }
           }
         } = files[0];
-        console.log("image", image);
-        console.log("defaultImage", defaultImage);
         const metaDescription = description || siteMetadata.description;
         const metaImage =
           image || defaultImage
             ? `${siteMetadata.siteUrl}${image || defaultImage}`
             : null;
-        // const metaImage = null;
-        console.log("metaImage", metaImage);
-        console.log("title", siteMetadata.title);
         const url = `${siteMetadata.siteUrl}${slug}`;
         const apple =
           siteMetadata.sources.filter(source => source.name === "Apple") || {};

@@ -1,14 +1,14 @@
 {
   "name": "gatsby-theme-podcast",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Gatsby theme for podcast sites",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@mdx-js/mdx": "^0.20.3",
+    "@mdx-js/mdx": "^1.0.4",
     "@mdx-js/tag": "^0.20.3",
     "gatsby-image": "^2.0.34",
-    "gatsby-mdx": "^0.5.5",
+    "gatsby-mdx": "^0.6.2",
     "gatsby-plugin-compile-es6-packages": "^1.0.6",
     "gatsby-plugin-page-creator": "^2.0.10",
     "gatsby-plugin-sharp": "^2.0.29",

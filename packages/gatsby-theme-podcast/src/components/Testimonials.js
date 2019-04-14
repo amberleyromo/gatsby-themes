@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 import colors from "../tokens/colors";

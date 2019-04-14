@@ -33,6 +33,7 @@ class EpisodePageTemplate extends React.Component {
 
         {
           <iframe
+            title={`Episode: ${episode.frontmatter.title}`}
             height="52px"
             width="100%"
             frameborder="no"
@@ -57,12 +58,14 @@ class EpisodePageTemplate extends React.Component {
             Edit on GitHub
           </a>
         </p>
-        <h3
+        <h2
           style={{
             fontFamily: "Montserrat, sans-serif",
             marginTop: rhythm(0.25)
           }}
-        />
+        >
+          {episode.frontmatter.title}
+        </h2>
         <div
           style={{
             display: "flex",

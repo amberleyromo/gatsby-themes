@@ -67,14 +67,6 @@ class EpisodePageTemplate extends React.Component {
             Edit on GitHub
           </a>
         </p>
-        <h2
-          style={{
-            fontFamily: "Montserrat, sans-serif",
-            marginTop: rhythm(0.25)
-          }}
-        >
-          {episode.frontmatter.title}
-        </h2>
         <div
           style={{
             display: "flex",

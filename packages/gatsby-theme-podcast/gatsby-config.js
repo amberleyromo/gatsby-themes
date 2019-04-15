@@ -18,7 +18,7 @@ module.exports = {
     ],
     // Tweet ids
     praise: [`1117454932880363522`],
-    appleAppId: null
+    appleAppId: false
   },
   plugins: [
     /*

@@ -59,6 +59,7 @@ function SEO({ meta, image, title, description, slug, embedUrl }) {
             ? `${siteMetadata.siteUrl}${image || defaultImage}`
             : null;
         const url = `${siteMetadata.siteUrl}${slug}`;
+        const appleAppId = siteMetadata.appleAppId;
         const rss =
           siteMetadata.sources.filter(source => source.name === "RSS") || {};
         const rssFeedUrl = rss.url;
@@ -132,7 +133,7 @@ function SEO({ meta, image, title, description, slug, embedUrl }) {
                   ? [
                       {
                         name: "apple-itunes-app",
-                        content: `app-id=${appId}`
+                        content: `app-id=${appleAppId}`
                       }
                     ]
                   : []

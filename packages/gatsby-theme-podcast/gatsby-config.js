@@ -13,33 +13,11 @@ module.exports = {
     sources: [
       {
         name: "RSS",
-        url: "https://feeds.simplecast.com/9H3Jd25O"
-      },
-      {
-        name: "Google",
-        url:
-          "https://www.google.com/podcasts?feed=aHR0cHM6Ly9yc3Muc2ltcGxlY2FzdC5jb20vcG9kY2FzdHMvNzA0OS9yc3M%3D"
-      },
-      {
-        name: "Apple",
-        url: "https://itunes.apple.com/us/podcast/hope-in-source/id1437677655",
-        appId: 1437677655
-      },
-      {
-        name: "Spotify",
-        url: "https://open.spotify.com/show/5EXwiyKzPrrucncKyrHy0B"
-      },
-      {
-        name: "GitHub",
-        url: "https://github.com/hzoo/hopeinsource.com"
+        url: "https://feeds.simplecast.com/"
       }
     ],
     // Tweet ids
-    praise: [
-      `1059181425184755713`,
-      `1052646871154548738`,
-      `1053342917014753281`
-    ]
+    praise: [`1117454932880363522`]
   },
   plugins: [
     /*

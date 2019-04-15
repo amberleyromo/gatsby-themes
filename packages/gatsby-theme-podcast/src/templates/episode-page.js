@@ -45,6 +45,15 @@ class EpisodePageTemplate extends React.Component {
           />
         }
 
+        <h2
+          style={{
+            fontFamily: "Montserrat, sans-serif",
+            marginTop: rhythm(0.25)
+          }}
+        >
+          {episode.frontmatter.title}
+        </h2>
+
         <blockquote>{episode.frontmatter.description}</blockquote>
 
         <MDXRenderer>{episode.code.body}</MDXRenderer>

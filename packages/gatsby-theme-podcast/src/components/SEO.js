@@ -17,8 +17,8 @@ const query = graphql`
         sources {
           name
           url
-          appId
         }
+        appleAppId
       }
     }
     allFile(
@@ -59,9 +59,6 @@ function SEO({ meta, image, title, description, slug, embedUrl }) {
             ? `${siteMetadata.siteUrl}${image || defaultImage}`
             : null;
         const url = `${siteMetadata.siteUrl}${slug}`;
-        const apple =
-          siteMetadata.sources.filter(source => source.name === "Apple") || {};
-        const appId = apple.appId;
         const rss =
           siteMetadata.sources.filter(source => source.name === "RSS") || {};
         const rssFeedUrl = rss.url;
@@ -131,7 +128,7 @@ function SEO({ meta, image, title, description, slug, embedUrl }) {
                   : []
               )
               .concat(
-                appId
+                appleAppId
                   ? [
                       {
                         name: "apple-itunes-app",

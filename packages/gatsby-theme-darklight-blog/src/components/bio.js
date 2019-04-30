@@ -55,7 +55,7 @@ const bioQuery = graphql`
         }
       }
     }
-    bioFragment: mdx(fileAbsolutePath: { regex: "/fragments/bio/" }) {
+    bioFragment: mdx(fileAbsolutePath: { regex: "/content/fragments/bio/" }) {
       id
       code {
         body

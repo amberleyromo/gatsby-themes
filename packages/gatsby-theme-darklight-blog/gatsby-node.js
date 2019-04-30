@@ -5,7 +5,12 @@ const _ = require("lodash");
 const { createFilePath } = require(`gatsby-source-filesystem`);
 
 exports.onPreBootstrap = ({ reporter }) => {
-  const dirs = ["content", "content/posts", "content/assets"];
+  const dirs = [
+    "content",
+    "content/posts",
+    "content/assets",
+    "content/fragments"
+  ];
 
   dirs.forEach(dir => {
     if (!fs.existsSync(dir)) {

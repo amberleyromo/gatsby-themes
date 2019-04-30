@@ -56,10 +56,17 @@ module.exports = {
       }
     },
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: "mdx-fragments",
-        path: `${__dirname}/src/fragments`
+        name: "blog-fragments",
+        path: "content/fragments"
+      }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "blog-demo-fragments",
+        path: `${__dirname}/content/fragments`
       }
     },
     {

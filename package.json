@@ -3,8 +3,8 @@
   "name": "gatsby-themes",
   "version": "0.0.2",
   "workspaces": [
-    "site",
-    "hope-in-source",
-    "packages/*"
+    "packages/*",
+    "podcast-site",
+    "blog-site"
   ]
 }

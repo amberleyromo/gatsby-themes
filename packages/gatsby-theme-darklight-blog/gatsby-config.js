@@ -22,23 +22,6 @@ module.exports = {
       }
     },
     /*
-     * Default/demo posts
-     */
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: "blog-default-posts",
-        path: `${__dirname}/content/posts`
-      }
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: "blog-default-assets",
-        path: `${__dirname}/content/assets`
-      }
-    },
-    /*
      * User override content
      */
     {
@@ -53,6 +36,23 @@ module.exports = {
       options: {
         name: "blog-assets",
         path: `content/assets`
+      }
+    },
+    /*
+     * Default/demo posts
+     */
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: "blog-default-posts",
+        path: `${__dirname}/content/posts`
+      }
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: "blog-default-assets",
+        path: `${__dirname}/content/assets`
       }
     },
     {

@@ -87,7 +87,12 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    `gatsby-mdx`,
+    {
+      resolve: `gatsby-mdx`,
+      options: {
+        extensions: [`.mdx`, `.md`]
+      }
+    },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {

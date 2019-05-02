@@ -1,3 +1,10 @@
 module.exports = {
-  __experimentalThemes: ["gatsby-theme-darklight-blog"]
+  __experimentalThemes: [
+    {
+      resolve: "gatsby-theme-darklight-blog",
+      options: {
+        theme: `misc-theme`
+      }
+    }
+  ]
 };

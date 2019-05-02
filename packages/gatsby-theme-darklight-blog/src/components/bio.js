@@ -8,7 +8,8 @@
 import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import Image from "gatsby-image";
-import { MDXRenderer } from "gatsby-mdx";
+// import { MDXRenderer } from "gatsby-mdx";
+import BioFragment from "../fragments/bio.mdx";
 
 import { rhythm } from "../utils/typography";
 
@@ -38,7 +39,7 @@ function Bio() {
                 borderRadius: `50%`
               }}
             />
-            <MDXRenderer>{data.bioFragment.code.body}</MDXRenderer>
+            <BioFragment />
           </div>
         );
       }}
@@ -55,12 +56,12 @@ const bioQuery = graphql`
         }
       }
     }
-    bioFragment: mdx(fileAbsolutePath: { regex: "/content/fragments/bio/" }) {
-      id
-      code {
-        body
-      }
-    }
+    # bioFragment: mdx(fileAbsolutePath: { regex: "/content/fragments/bio/" }) {
+    #   id
+    #   code {
+    #     body
+    #   }
+    # }
     site {
       siteMetadata {
         author

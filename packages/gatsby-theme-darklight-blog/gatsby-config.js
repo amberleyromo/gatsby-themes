@@ -5,7 +5,7 @@ module.exports = {
     title: `My Blog Title`,
     author: `Your Name`,
     description: `coming soon...`,
-    siteUrl: `hhttps://github.com/amberleyromo/gatsby-themes/tree/master/packages/gatsby-theme-misc-blog`,
+    siteUrl: `https://github.com/amberleyromo/gatsby-themes/tree/master/packages/gatsby-theme-darklight-blog`,
     social: {
       twitter: `amber1ey`
     }

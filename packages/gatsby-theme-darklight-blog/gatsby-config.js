@@ -83,7 +83,22 @@ module.exports = {
     {
       resolve: `gatsby-mdx`,
       options: {
-        extensions: [`.mdx`, `.md`]
+        extensions: [".mdx", ".md"],
+        gatsbyRemarkPlugins: [
+          {
+            resolve: "gatsby-remark-images",
+            options: {
+              maxWidth: 1380,
+              linkImagesToOriginal: false
+            }
+          },
+          { resolve: "gatsby-remark-responsive-iframe" },
+          { resolve: "gatsby-remark-copy-linked-files" },
+          { resolve: "gatsby-remark-numbered-footnotes" },
+          { resolve: "gatsby-remark-smartypants" },
+          { resolve: "gatsby-remark-code-titles" },
+          { resolve: "gatsby-remark-prismjs" }
+        ]
       }
     },
     {

@@ -5,6 +5,7 @@
   "workspaces": [
     "packages/*",
     "podcast-site",
-    "blog-site"
+    "darklight-blog-default",
+    "darklight-blog-color"
   ]
 }

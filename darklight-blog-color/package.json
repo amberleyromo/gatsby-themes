@@ -1,7 +1,7 @@
 {
-  "name": "blog-site",
+  "name": "darklight-blog-color",
   "version": "0.0.1",
-  "description": "A blog site consuming gatsby-theme-darklight-blog",
+  "description": "A blog site consuming gatsby-theme-darklight-blog. Shadows content, theme color.",
   "main": "gatsby-config.js",
   "license": "MIT",
   "private": true,

@@ -1,47 +1,41 @@
-import React from "react";
-import { Link, graphql } from "gatsby";
+import React from "react"
+import { Link, graphql } from "gatsby"
+import { Styled, css, Flex } from "theme-ui"
 
-import Bio from "../components/bio";
-import Layout from "../components/layout";
-import SEO from "../components/seo";
-import { rhythm, scale } from "../utils/typography";
-import { MDXRenderer } from "gatsby-mdx";
+import Bio from "../components/bio"
+import Layout from "../components/layout"
+import SEO from "../components/seo"
+import { MDXRenderer } from "gatsby-mdx"
 
 class BlogPostTemplate extends React.Component {
   render() {
-    const post = this.props.data.mdx;
-    const siteTitle = this.props.data.site.siteMetadata.title;
-    const { previous, next } = this.props.pageContext;
+    const post = this.props.data.mdx
+    const siteTitle = this.props.data.site.siteMetadata.title
+    const { previous, next } = this.props.pageContext
 
     return (
       <Layout location={this.props.location} title={siteTitle}>
         <SEO title={post.frontmatter.title} description={post.excerpt} />
-        <h1>{post.frontmatter.title}</h1>
-        <p
-          style={{
-            ...scale(-1 / 5),
-            display: `block`,
-            marginBottom: rhythm(1),
-            marginTop: rhythm(-1)
-          }}
+        <Styled.h1>{post.frontmatter.title}</Styled.h1>
+        <Styled.p
+          css={css({
+            fontSize: 1,
+            mt: -3,
+            mb: 3,
+          })}
         >
           {post.frontmatter.date}
-        </p>
+        </Styled.p>
         <MDXRenderer>{post.code.body}</MDXRenderer>
-        <hr
-          style={{
-            marginBottom: rhythm(1)
-          }}
-        />
+        <Styled.hr />
         <Bio />
-
-        <ul
-          style={{
-            display: `flex`,
+        <Flex
+          as="ul"
+          css={{
             flexWrap: `wrap`,
             justifyContent: `space-between`,
             listStyle: `none`,
-            padding: 0
+            padding: 0,
           }}
         >
           <li>
@@ -58,13 +52,13 @@ class BlogPostTemplate extends React.Component {
               </Link>
             )}
           </li>
-        </ul>
+        </Flex>
       </Layout>
-    );
+    )
   }
 }
 
-export default BlogPostTemplate;
+export default BlogPostTemplate
 
 export const pageQuery = graphql`
   query BlogPostBySlug($slug: String!) {
@@ -86,4 +80,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`

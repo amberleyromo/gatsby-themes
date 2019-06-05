@@ -5,72 +5,55 @@
  * See: https://www.gatsbyjs.org/docs/static-query/
  */
 
-import React from "react";
-import { StaticQuery, graphql } from "gatsby";
-import Image from "gatsby-image";
-// import { MDXRenderer } from "gatsby-mdx";
-import BioFragment from "../fragments/bio.mdx";
+import React from "react"
+import { useStaticQuery, graphql } from "gatsby"
+import Image from "gatsby-image"
+import { Styled, css, Flex } from "theme-ui"
+import BioContent from "./bio-content.js"
 
-import { rhythm } from "../utils/typography";
+const Bio = () => {
+  const data = useStaticQuery(bioQuery)
+  const {
+    site: {
+      siteMetadata: { author },
+    },
+    avatar,
+  } = data
 
-function Bio() {
   return (
-    <StaticQuery
-      query={bioQuery}
-      render={data => {
-        const { author } = data.site.siteMetadata;
-        return (
-          <div
-            style={{
-              display: `flex`,
-              marginBottom: rhythm(2.5)
-            }}
-          >
-            <Image
-              fixed={data.avatar.childImageSharp.fixed}
-              alt={author}
-              style={{
-                marginRight: rhythm(1 / 2),
-                marginBottom: 0,
-                minWidth: 50,
-                borderRadius: `100%`
-              }}
-              imgStyle={{
-                borderRadius: `50%`
-              }}
-            />
-            <BioFragment />
-          </div>
-        );
-      }}
-    />
-  );
+    <Flex mb={4}>
+      <Image
+        fixed={avatar.childImageSharp.fixed}
+        alt={author}
+        css={css({
+          mr: 2,
+          mb: 0,
+          width: 48,
+          borderRadius: 99999,
+        })}
+      />
+      <Styled.p>
+        <BioContent />
+      </Styled.p>
+    </Flex>
+  )
 }
 
 const bioQuery = graphql`
   query BioQuery {
+    site {
+      siteMetadata {
+        author
+      }
+    }
     avatar: file(absolutePath: { regex: "/profile-pic.jpg/" }) {
       childImageSharp {
-        fixed(width: 50, height: 50) {
+        fixed(width: 48, height: 48) {
           ...GatsbyImageSharpFixed
         }
       }
     }
-    # bioFragment: mdx(fileAbsolutePath: { regex: "/content/fragments/bio/" }) {
-    #   id
-    #   code {
-    #     body
-    #   }
-    # }
-    site {
-      siteMetadata {
-        author
-        social {
-          twitter
-        }
-      }
-    }
   }
-`;
+`
 
-export default Bio;
+export default Bio

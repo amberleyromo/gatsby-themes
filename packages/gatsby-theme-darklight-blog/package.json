@@ -1,6 +1,6 @@
 {
   "name": "gatsby-theme-darklight-blog",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A Gatsby theme for miscellaneous blogging with a dark/light mode",
   "main": "index.js",
   "license": "MIT",

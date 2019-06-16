@@ -33,10 +33,14 @@ Wordpress2016.overrideThemeStyles = () => ({
   "li code": {
     fontSize: "1rem"
   },
+  // ul: {
+  //   marginLeft: "1rem"
+  // },
   blockquote: {
     color: "inherit",
     borderLeftColor: "inherit",
-    opacity: "0.8"
+    opacity: "0.8",
+    marginLeft: 0
   }
 });
 

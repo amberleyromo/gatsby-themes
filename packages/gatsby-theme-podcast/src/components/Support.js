@@ -1,6 +1,6 @@
-import React from 'react';
-import { StaticQuery, graphql } from 'gatsby';
-import { MDXRenderer } from 'gatsby-plugin-mdx';
+import React from "react";
+import { StaticQuery, graphql } from "gatsby";
+import { MDXRenderer } from "gatsby-plugin-mdx";
 
 const query = graphql`
   query getSupport {
@@ -18,9 +18,9 @@ const Support = () => (
       return (
         <div
           style={{
-            maxWidth: 620,
-            backgroundColor: '#4F5B66',
-            textAlign: 'center'
+            width: `100%`,
+            backgroundColor: "#4F5B66",
+            textAlign: "center"
           }}
         >
           <MDXRenderer>{data.mdx.body}</MDXRenderer>

@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { FaPlay, FaPause } from 'react-icons/fa';
-import formatTime from './lib/formatTime';
-import VolumeBars from './VolumeBars';
+import React from "react";
+import PropTypes from "prop-types";
+import { FaPlay, FaPause } from "react-icons/fa";
+import formatTime from "./lib/formatTime";
+import VolumeBars from "./VolumeBars";
 
 export default class Player extends React.Component {
   static propTypes = {
@@ -17,7 +17,7 @@ export default class Player extends React.Component {
     let lastPlaybackRate = 1;
 
     // for Server Side Rendering
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const { show } = this.props;
       const lp = localStorage.getItem(`lastPlayed${show.number}`);
       const lastVolume = localStorage.getItem(`lastVolumeSetting`);
@@ -39,7 +39,7 @@ export default class Player extends React.Component {
       timeWasLoaded: lastPlayed !== 0,
       showTooltip: false,
       tooltipPosition: 0,
-      tooltipTime: '0:00'
+      tooltipTime: "0:00"
     };
   } // END Constructor
 
@@ -49,15 +49,15 @@ export default class Player extends React.Component {
 
   componentDidMount() {
     // Add a hashchange listener
-    if (typeof window !== 'undefined') {
-      window.addEventListener('hashchange', this.testAudioSeek);
+    if (typeof window !== "undefined") {
+      window.addEventListener("hashchange", this.testAudioSeek);
     }
   }
 
   componentWillUnmount() {
     // Add a hashchange listener
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('hashchange', this.testAudioSeek);
+    if (typeof window !== "undefined") {
+      window.removeEventListener("hashchange", this.testAudioSeek);
     }
   }
 
@@ -139,7 +139,7 @@ export default class Player extends React.Component {
 
   togglePlay = () => {
     const { playing } = this.state;
-    const method = playing ? 'pause' : 'play';
+    const method = playing ? "pause" : "play";
     this.audio[method]();
   };
 
@@ -160,7 +160,7 @@ export default class Player extends React.Component {
 
   playPause = () => {
     this.setState({ playing: !this.audio.paused });
-    const method = this.audio.paused ? 'add' : 'remove';
+    const method = this.audio.paused ? "add" : "remove";
     // This controls the active episode indicator
     // document.querySelector('.bars').classList[method]('bars--paused'); // 💩
   };
@@ -203,7 +203,7 @@ export default class Player extends React.Component {
 
     // this looks for a URL hash using this format:
     // #playFrom=<number of seconds> (e.g. #playFrom=120)
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const url = new URL(window.location);
       const time = url.hash.slice(10);
 
@@ -231,7 +231,7 @@ export default class Player extends React.Component {
         <div className="player__section player__section--left">
           <button
             onClick={this.togglePlay}
-            aria-label={playing ? 'pause' : 'play'}
+            aria-label={playing ? "pause" : "play"}
             type="button"
           >
             <p className="player__icon">{playing ? <FaPause /> : <FaPlay />}</p>
@@ -268,7 +268,7 @@ export default class Player extends React.Component {
             className="player__tooltip"
             style={{
               left: `${tooltipPosition}px`,
-              opacity: `${showTooltip ? '1' : '0'}`
+              opacity: `${showTooltip ? "1" : "0"}`
             }}
           >
             {tooltipTime}
@@ -301,7 +301,7 @@ export default class Player extends React.Component {
           onLoadedMetadata={this.groupUpdates}
           src={show.url}
         />
-        <button onClick={this.testAudioSeek}>Test Seeking</button>
+        {/* <button onClick={this.testAudioSeek}>Test Seeking</button> */}
       </div>
     );
   }

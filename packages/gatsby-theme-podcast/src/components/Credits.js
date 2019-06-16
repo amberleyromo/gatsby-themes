@@ -1,14 +1,12 @@
-import React from "react";
-import { StaticQuery, graphql } from "gatsby";
-import { MDXRenderer } from "gatsby-mdx";
+import React from 'react';
+import { StaticQuery, graphql } from 'gatsby';
+import { MDXRenderer } from 'gatsby-plugin-mdx';
 
 const query = graphql`
   query getCredits {
     mdx(fileAbsolutePath: { regex: "/content/fragments/credits/" }) {
       id
-      code {
-        body
-      }
+      body
     }
   }
 `;
@@ -17,7 +15,7 @@ const PodcastCredits = () => (
   <StaticQuery
     query={query}
     render={data => {
-      return <MDXRenderer>{data.mdx.code.body}</MDXRenderer>;
+      return <MDXRenderer>{data.mdx.body}</MDXRenderer>;
     }}
   />
 );

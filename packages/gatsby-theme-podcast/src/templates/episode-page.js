@@ -1,14 +1,16 @@
 import React from "react";
 import { Link, graphql } from "gatsby";
 import get from "lodash/get";
+import PodcastPlayer from "syntax-podcast-player";
 
-import { MDXRenderer } from "gatsby-mdx";
+import { MDXRenderer } from "gatsby-plugin-mdx";
 import Layout from "../components/Layout";
 import Support from "../components/Support";
 import SEO from "../components/SEO";
 // import { formatReadingTime } from "../utils/helpers";
 import { rhythm } from "../utils/typography";
 
+import "./player-styles.css";
 class EpisodePageTemplate extends React.Component {
   render() {
     const episode = this.props.data.mdx;
@@ -31,72 +33,76 @@ class EpisodePageTemplate extends React.Component {
 
         <Support />
 
-        {
-          <iframe
-            title={`Episode: ${episode.frontmatter.title}`}
-            height="52px"
-            width="100%"
-            frameborder="no"
-            scrolling="no"
-            seamless
-            src={`https://player.simplecast.com/${
-              episode.frontmatter.episodeLink
-            }?dark=true&color=1B2B34`}
-          />
-        }
-
-        <h2
-          style={{
-            fontFamily: "Montserrat, sans-serif",
-            marginTop: rhythm(0.25)
-          }}
-        >
-          {episode.frontmatter.title}
-        </h2>
-
-        <blockquote>{episode.frontmatter.description}</blockquote>
-
-        <MDXRenderer>{episode.code.body}</MDXRenderer>
-
-        <p>
-          <a href={discussUrl} target="_blank" rel="noopener noreferrer">
-            Discuss on Twitter
-          </a>
-          {` • `}
-          <a href={editUrl} target="_blank" rel="noopener noreferrer">
-            Edit on GitHub
-          </a>
-        </p>
-        <div
-          style={{
-            display: "flex",
-            marginBottom: rhythm(2.5)
+        <PodcastPlayer
+          show={{
+            number: "1",
+            displayNumber: "1",
+            title: "Testing",
+            url:
+              "https://dts.podtrac.com/redirect.mp3/cdn.simplecast.com/audio/219f49/219f4989-7b89-413b-8f22-f290d553de6a/c302abae-9279-4ea1-94ab-f6f2ab9b2fca/11_Cities_tc.mp3"
           }}
         />
-        <ul
+
+        <article
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            listStyle: "none",
-            padding: 0
+            maxWidth: "42rem",
+            margin: "2.6rem auto 0 auto"
           }}
         >
-          <li>
-            {previous && (
-              <Link to={previous.fields.slug} rel="prev">
-                ← {previous.frontmatter.title}
-              </Link>
-            )}
-          </li>
-          <li>
-            {next && (
-              <Link to={next.fields.slug} rel="next">
-                {next.frontmatter.title} →
-              </Link>
-            )}
-          </li>
-        </ul>
+          <h2
+            style={{
+              fontFamily: "Montserrat, sans-serif",
+              marginTop: rhythm(0.25)
+            }}
+          >
+            {episode.frontmatter.title}
+          </h2>
+
+          <blockquote>{episode.frontmatter.description}</blockquote>
+
+          <MDXRenderer>{episode.body}</MDXRenderer>
+
+          <p>
+            <a href={discussUrl} target="_blank" rel="noopener noreferrer">
+              Discuss on Twitter
+            </a>
+            {` • `}
+            <a href={editUrl} target="_blank" rel="noopener noreferrer">
+              Edit on GitHub
+            </a>
+          </p>
+          <div
+            style={{
+              display: "flex",
+              marginBottom: rhythm(2.5)
+            }}
+          />
+          <ul
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+              listStyle: "none",
+              marginLeft: "1rem",
+              padding: 0
+            }}
+          >
+            <li>
+              {previous && (
+                <Link to={previous.fields.slug} rel="prev">
+                  ← {previous.frontmatter.title}
+                </Link>
+              )}
+            </li>
+            <li>
+              {next && (
+                <Link to={next.fields.slug} rel="next">
+                  {next.frontmatter.title} →
+                </Link>
+              )}
+            </li>
+          </ul>
+        </article>
         {/* <Footer /> */}
       </Layout>
     );
@@ -117,9 +123,7 @@ export const query = graphql`
     }
     mdx(fields: { slug: { eq: $slug } }) {
       id
-      code {
-        body
-      }
+      body
       timeToRead
       frontmatter {
         title

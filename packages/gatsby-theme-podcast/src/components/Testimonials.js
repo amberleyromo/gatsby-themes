@@ -22,7 +22,6 @@ const PodcastDescription = () => (
           siteMetadata: { praise }
         }
       } = data;
-      console.log("colors.green", colors.textLink);
 
       return (
         <div

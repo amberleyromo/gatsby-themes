@@ -1,3 +1,3 @@
 module.exports = {
-  __experimentalThemes: ['gatsby-theme-podcast']
+  plugins: ["gatsby-theme-podcast"]
 };

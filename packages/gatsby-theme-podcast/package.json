@@ -25,12 +25,12 @@
     "typography-theme-wordpress-2016": "^0.16.19"
   },
   "devDependencies": {
-    "gatsby": "^2.1.38",
+    "gatsby": "^2.13.25",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
   },
   "peerDependencies": {
-    "gatsby": "^2.1.38",
+    "gatsby": "^2.13.25",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
   }

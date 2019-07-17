@@ -28,13 +28,13 @@ const createContentDigest = obj =>
 
 const createChildren = (items, parentId, createNode) => {
   const childIds = [];
-  items.forEach(entry => {
-    childIds.push(entry.link);
-    const node = Object.assign({}, entry, {
-      id: entry.link,
-      title: entry.title,
-      link: entry.link,
-      description: entry.description,
+  items.forEach(item => {
+    childIds.push(item.link);
+    const node = Object.assign({}, item, {
+      id: item.link,
+      title: item.title,
+      description: item.description,
+      link: item.link,
       parent: parentId,
       children: []
     });
@@ -47,23 +47,27 @@ const createChildren = (items, parentId, createNode) => {
   return childIds;
 };
 
-async function sourceNodes({ boundActionCreators }, options = {}) {
-  console.log(`theme options?`, options);
+async function sourceNodes({ boundActionCreators }, { rssSource = "" }) {
+  if (!rssSource) {
+    console.log(`no RSS source`);
+    return;
+  }
   const { createNode } = boundActionCreators;
   const data = await parser.parseURL("https://anchor.fm/s/c157438/podcast/rss");
 
-  console.log(`data`, data);
-  console.log(Object.keys(data));
   if (!data) {
     return;
   }
-  const { title, description, link, items } = data;
+  const { title, description, link, image, items } = data;
+  console.log(`image.url`, image.url);
+  console.log(`link`, link);
   const childrenIds = createChildren(items, link, createNode);
   const feedStory = {
     id: link,
     title,
     description,
     link,
+    // imageUrl: image.url, // this breaks things?
     parent: null,
     children: childrenIds
   };

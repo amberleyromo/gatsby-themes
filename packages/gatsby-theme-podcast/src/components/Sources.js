@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { StaticQuery, graphql } from "gatsby";
+import { useStaticQuery, graphql } from "gatsby";
 
 const query = graphql`
   query getSources {
@@ -16,28 +16,25 @@ const query = graphql`
   }
 `;
 
-const Sources = () => (
-  <StaticQuery
-    query={query}
-    render={data => {
-      const metaData = data.site.siteMetadata;
-      const lastSource = metaData.sources.length - 1;
-      return (
-        <p style={{ textAlign: "center" }}>
-          {metaData.sources.map((source, idx) => {
-            return (
-              <Fragment key={source.name}>
-                <a href={source.url} target="_blank" rel="noopener noreferrer">
-                  {source.name}
-                </a>
-                {idx !== lastSource && <span> &bull; </span>}
-              </Fragment>
-            );
-          })}
-        </p>
-      );
-    }}
-  />
-);
+const Sources = () => {
+  const data = useStaticQuery(query);
+  const metaData = data.site.siteMetadata;
+  console.log(`metaData.sources`, metaData.sources);
+  const lastSource = metaData.sources.length - 1;
+  return (
+    <p style={{ textAlign: "center" }}>
+      {metaData.sources.map((source, idx) => {
+        return (
+          <Fragment key={source.name}>
+            <a href={source.url} target="_blank" rel="noopener noreferrer">
+              {source.name}
+            </a>
+            {idx !== lastSource && <span> &bull; </span>}
+          </Fragment>
+        );
+      })}
+    </p>
+  );
+};
 
 export default Sources;

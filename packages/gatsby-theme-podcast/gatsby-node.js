@@ -47,12 +47,12 @@ const createChildren = (items, parentId, createNode) => {
   return childIds;
 };
 
-async function sourceNodes({ boundActionCreators }, { rssSource = "" }) {
+async function sourceNodes({ actions }, { rssSource = "" }) {
   if (!rssSource) {
-    console.log(`no RSS source`);
+    console.log(`gatsby-theme-podcast requires an RSS feed`);
     return;
   }
-  const { createNode } = boundActionCreators;
+  const { createNode } = actions;
   const data = await parser.parseURL("https://anchor.fm/s/c157438/podcast/rss");
 
   if (!data) {

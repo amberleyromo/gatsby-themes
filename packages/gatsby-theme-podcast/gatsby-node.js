@@ -47,27 +47,38 @@ const createChildren = (items, parentId, createNode) => {
   return childIds;
 };
 
+const generateEpisodeSlug = title => {
+  return (
+    title
+      // remove non-alphanumeric characters, except spaces
+      .replace(/[^\w\s]/gi, "")
+      .toLowerCase()
+      .split(" ")
+      .join("-")
+  );
+};
+
 async function sourceNodes({ actions }, { rssSource = "" }) {
   if (!rssSource) {
     console.log(`gatsby-theme-podcast requires an RSS feed`);
     return;
   }
   const { createNode } = actions;
-  const data = await parser.parseURL("https://anchor.fm/s/c157438/podcast/rss");
+  const data = await parser.parseURL(rssSource);
 
   if (!data) {
     return;
   }
   const { title, description, link, image, items } = data;
-  console.log(`image.url`, image.url);
-  console.log(`link`, link);
+  let slug = generateEpisodeSlug(title);
   const childrenIds = createChildren(items, link, createNode);
   const feedStory = {
     id: link,
+    // slug, // adding new fields breaks things?
     title,
     description,
     link,
-    // imageUrl: image.url, // this breaks things?
+    // imageUrl: image.url, // adding new fields breaks things?
     parent: null,
     children: childrenIds
   };

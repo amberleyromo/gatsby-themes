@@ -1,7 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const Promise = require("bluebird");
-const _ = require("lodash");
 
 exports.onPreBootstrap = ({ reporter }) => {
   const dirs = [
@@ -19,66 +17,61 @@ exports.onPreBootstrap = ({ reporter }) => {
   });
 };
 
-exports.createPages = ({ graphql, actions }) => {
+exports.createPages = async function createPages({ graphql, actions }) {
   const { createPage } = actions;
-
-  return new Promise((resolve, reject) => {
-    const episodePage = require.resolve("./src/templates/episode-page.js");
-    resolve(
-      graphql(
-        `
-          {
-            allMdx(
-              sort: {
-                fields: [frontmatter___date, frontmatter___title]
-                order: DESC
+  const episodePage = require.resolve("./src/templates/episode-page.js");
+  const result = await graphql(
+    `
+      {
+        allMdx(
+          sort: {
+            fields: [frontmatter___date, frontmatter___title]
+            order: DESC
+          }
+          filter: {
+            fields: {
+              source: { in: ["podcast-demo-episodes", "podcast-episodes"] }
+              slug: { ne: null }
+            }
+          }
+          limit: 1000
+        ) {
+          edges {
+            node {
+              fields {
+                slug
               }
-              filter: {
-                fields: {
-                  source: { in: ["podcast-demo-episodes", "podcast-episodes"] }
-                  slug: { ne: null }
-                }
-              }
-              limit: 1000
-            ) {
-              edges {
-                node {
-                  fields {
-                    slug
-                  }
-                  frontmatter {
-                    title
-                  }
-                }
+              frontmatter {
+                title
               }
             }
           }
-        `
-      ).then(result => {
-        if (result.errors) {
-          console.log(result.errors);
-          reject(result.errors);
         }
+      }
+    `
+  ).then(response => {
+    if (response.errors) {
+      throw new Error(response.errors);
+    }
+    return response;
+  });
 
-        // Create episode pages.
-        const episodes = result.data.allMdx.edges;
-        _.each(episodes, (episode, index) => {
-          const previous =
-            index === episodes.length - 1 ? null : episodes[index + 1].node;
-          const next = index === 0 ? null : episodes[index - 1].node;
+  // Create episode pages.
+  const episodes = result.data.allMdx.edges;
+  episodes.forEach((episode, index) => {
+    const previous =
+      index === episodes.length - 1 ? null : episodes[index + 1].node;
+    const next = index === 0 ? null : episodes[index - 1].node;
 
-          createPage({
-            path: episode.node.fields.slug,
-            component: episodePage,
-            context: {
-              slug: episode.node.fields.slug,
-              previous,
-              next
-            }
-          });
-        });
-      })
-    );
+    createPage({
+      path: episode.node.fields.slug,
+      component: episodePage,
+      context: {
+        slug: episode.node.fields.slug,
+        previous,
+        next
+      }
+    });
   });
 };
 

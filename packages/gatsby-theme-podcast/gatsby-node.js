@@ -1,5 +1,8 @@
 const fs = require("fs");
 const path = require("path");
+const Parser = require("rss-parser");
+const parser = new Parser();
+const crypto = require("crypto");
 
 exports.onPreBootstrap = ({ reporter }) => {
   const dirs = [
@@ -16,6 +19,64 @@ exports.onPreBootstrap = ({ reporter }) => {
     }
   });
 };
+
+const createContentDigest = obj =>
+  crypto
+    .createHash("md5")
+    .update(JSON.stringify(obj))
+    .digest("hex");
+
+const createChildren = (items, parentId, createNode) => {
+  const childIds = [];
+  items.forEach(entry => {
+    childIds.push(entry.link);
+    const node = Object.assign({}, entry, {
+      id: entry.link,
+      title: entry.title,
+      link: entry.link,
+      description: entry.description,
+      parent: parentId,
+      children: []
+    });
+    node.internal = {
+      type: "rssFeedItem",
+      contentDigest: createContentDigest(node)
+    };
+    createNode(node);
+  });
+  return childIds;
+};
+
+async function sourceNodes({ boundActionCreators }, options = {}) {
+  console.log(`theme options?`, options);
+  const { createNode } = boundActionCreators;
+  const data = await parser.parseURL("https://anchor.fm/s/c157438/podcast/rss");
+
+  console.log(`data`, data);
+  console.log(Object.keys(data));
+  if (!data) {
+    return;
+  }
+  const { title, description, link, items } = data;
+  const childrenIds = createChildren(items, link, createNode);
+  const feedStory = {
+    id: link,
+    title,
+    description,
+    link,
+    parent: null,
+    children: childrenIds
+  };
+
+  feedStory.internal = {
+    type: "rssFeed",
+    contentDigest: createContentDigest(feedStory)
+  };
+
+  createNode(feedStory);
+}
+
+exports.sourceNodes = sourceNodes;
 
 exports.createPages = async function createPages({ graphql, actions }) {
   const { createPage } = actions;

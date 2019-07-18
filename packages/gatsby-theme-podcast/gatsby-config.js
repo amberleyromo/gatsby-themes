@@ -1,6 +1,6 @@
 const pkg = require("./package.json");
 
-module.exports = () => ({
+module.exports = ({ rssSource = "" }) => ({
   siteMetadata: {
     title: "The podcast title",
     author: "Jane Doe & John Doe",
@@ -29,6 +29,12 @@ module.exports = () => ({
       resolve: "gatsby-plugin-compile-es6-packages",
       options: {
         modules: [pkg.name]
+      }
+    },
+    {
+      resolve: "@amber1ey/gatsby-source-rss-feed",
+      options: {
+        rssSource
       }
     },
     {

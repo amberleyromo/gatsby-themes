@@ -3,7 +3,7 @@ import { Link, graphql } from "gatsby";
 import get from "lodash.get";
 import PodcastPlayer from "syntax-podcast-player";
 
-// import { MDXRenderer } from "gatsby-plugin-mdx";
+import { MDXRenderer } from "gatsby-plugin-mdx";
 import Layout from "../components/Layout";
 import Support from "../components/Support";
 import SEO from "../components/SEO";
@@ -66,10 +66,7 @@ class RssItemPageTemplate extends React.Component {
             }}
           />
 
-          <p>
-            @TODO: Need to create a way to add additional episode/show content,
-            like transcripts and show notes
-          </p>
+          <MDXRenderer>{rssItem.childMdx.body}</MDXRenderer>
 
           <p>
             <a href={discussUrl} target="_blank" rel="noopener noreferrer">
@@ -144,6 +141,9 @@ export const query = graphql`
       }
       excerpt
       duration
+      childMdx {
+        body
+      }
     }
   }
 `;

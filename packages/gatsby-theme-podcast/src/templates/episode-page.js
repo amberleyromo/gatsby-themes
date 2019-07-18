@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, graphql } from "gatsby";
-import get from "lodash/get";
+import get from "lodash.get";
 import PodcastPlayer from "syntax-podcast-player";
 
-import { MDXRenderer } from "gatsby-plugin-mdx";
+// import { MDXRenderer } from "gatsby-plugin-mdx";
 import Layout from "../components/Layout";
 import Support from "../components/Support";
 import SEO from "../components/SEO";
@@ -16,11 +16,12 @@ class RssItemPageTemplate extends React.Component {
     const rssItem = this.props.data.rssFeedItem;
     const siteMetadata = get(this.props, "data.site.siteMetadata");
     const { previous, next, slug } = this.props.pageContext;
+    // @TODO this won't do anything currently -- no corresponding .md file
     const editUrl = `https://github.com/${siteMetadata.gitOrg}/${
       siteMetadata.siteUrl
     }/edit/master/src/pages/${slug.replace(/\//g, "")}.md`;
     let discussUrl = `https://twitter.com/search?q=${encodeURIComponent(
-      `${siteMetadata.siteUrl}${slug}`
+      `${siteMetadata.siteUrl}/${slug}/`
     )}`;
     // "trailer" has a "null" value
     let itemNumber = rssItem.itunes.episode || "0";
@@ -59,7 +60,11 @@ class RssItemPageTemplate extends React.Component {
             {rssItem.title}
           </h2>
 
-          <blockquote>{rssItem.excerpt}</blockquote>
+          <blockquote
+            dangerouslySetInnerHTML={{
+              __html: rssItem.excerpt
+            }}
+          />
 
           <p>
             @TODO: Need to create a way to add additional episode/show content,
@@ -131,13 +136,14 @@ export const query = graphql`
       isoDate(formatString: "MMMM DD, YYYY")
       content
       itunes {
-        duration
         episode
       }
       link
       audio: enclosure {
         url
       }
+      excerpt
+      duration
     }
   }
 `;

@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const Parser = require("rss-parser");
 const parser = new Parser();
-const crypto = require("crypto");
 
 exports.onPreBootstrap = ({ reporter }) => {
   const dirs = [
@@ -60,25 +60,9 @@ async function sourceNodes({ actions }, { rssSource = "" }) {
 
   // Create nodes for top-level RSS feed info
   const { title, description, link, image, items } = data;
-  const feedInfo = {
-    id: link,
-    title,
-    description,
-    link,
-    imageUrl: image.url,
-    parent: null
-  };
 
-  feedInfo.internal = {
-    type: "rssFeedInfo",
-    contentDigest: createContentDigest(feedInfo)
-  };
-
-  createNode(feedInfo);
-
-  // Create nodes for RSS items
   // Prepare RSS item nodes
-  const prepareRssItemNodes = items.map(rssItem => {
+  const preparedRssItemNodes = items.map(rssItem => {
     let slug = generateRSSItemSlug(rssItem.title);
     let excerpt = extractFirstParagraph(rssItem.content);
     let duration = durationToMinutes(rssItem.itunes.duration);
@@ -98,8 +82,26 @@ async function sourceNodes({ actions }, { rssSource = "" }) {
     };
     return node;
   });
-  // Create RSS item nodes
-  prepareRssItemNodes.forEach(rssItemNode => createNode(rssItemNode));
+
+  const feedInfo = {
+    id: link,
+    title,
+    description,
+    link,
+    imageUrl: image.url,
+    items___NODE: preparedRssItemNodes.map(node => node.id),
+    parent: null
+  };
+
+  feedInfo.internal = {
+    type: "rssFeedInfo",
+    contentDigest: createContentDigest(feedInfo)
+  };
+
+  createNode(feedInfo);
+
+  // Actually create nodes for RSS items
+  preparedRssItemNodes.forEach(rssItemNode => createNode(rssItemNode));
 }
 
 exports.sourceNodes = sourceNodes;
@@ -144,6 +146,11 @@ exports.createPages = async function createPages({ graphql, actions }) {
   });
 };
 
+// *
+// * @TODO this is all now outdated
+// * These files should only exist in the site/theme starter
+// * Need to be pulled in (if exists) to corresponding episode
+// *
 let userCreatedOwnEpisodes = false;
 
 exports.onCreateNode = ({ node, actions, getNode }) => {

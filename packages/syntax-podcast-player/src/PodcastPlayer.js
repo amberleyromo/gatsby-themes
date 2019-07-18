@@ -160,7 +160,7 @@ export default class Player extends React.Component {
 
   playPause = () => {
     this.setState({ playing: !this.audio.paused });
-    const method = this.audio.paused ? "add" : "remove";
+    // const method = this.audio.paused ? "add" : "remove";
     // This controls the active episode indicator
     // document.querySelector('.bars').classList[method]('bars--paused'); // 💩
   };

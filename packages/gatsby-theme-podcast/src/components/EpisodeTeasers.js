@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Link, useStaticQuery, StaticQuery, graphql } from "gatsby";
+import { Link, useStaticQuery, graphql } from "gatsby";
 
 const query = graphql`
   query getEpisodes {
@@ -43,7 +43,6 @@ const PostTeasers = () => {
           title,
           date,
           description,
-          link,
           itunes: { duration }
         } = episode;
         const formattedDescription = extractFirstParagraph(description);

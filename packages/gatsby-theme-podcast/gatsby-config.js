@@ -1,23 +1,23 @@
-const pkg = require('./package.json');
+const pkg = require("./package.json");
 
-module.exports = {
+module.exports = ({ rssSource = "" }) => ({
   siteMetadata: {
-    title: 'The podcast title',
-    author: 'Jane Doe & John Doe',
-    description: 'Description of the show.',
-    gitOrg: 'GitHub org name for the podcast site',
-    siteUrl: 'https://yoursiteurl.com',
+    title: "The podcast title",
+    author: "Jane Doe & John Doe",
+    description: "Description of the show.",
+    gitOrg: "GitHub org name for the podcast site",
+    siteUrl: "https://yoursiteurl.com",
     social: {
-      twitter: '@yourshowhandle'
+      twitter: "@yourshowhandle"
     },
     sources: [
       {
-        name: 'RSS',
-        url: 'https://feeds.simplecast.com/'
+        name: "RSS",
+        url: "https://feeds.simplecast.com/"
       }
     ],
     // Tweet ids
-    praise: [`1117454932880363522`],
+    praise: [`1145685107845603329`],
     appleAppId: false
   },
   plugins: [
@@ -26,74 +26,80 @@ module.exports = {
      * this plugin and specify the package name in `modules`.
      */
     {
-      resolve: 'gatsby-plugin-compile-es6-packages',
+      resolve: "gatsby-plugin-compile-es6-packages",
       options: {
         modules: [pkg.name]
       }
     },
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "@amber1ey/gatsby-source-rss-feed",
       options: {
-        name: 'podcast-episodes',
-        path: 'content/episodes'
+        rssSource
       }
     },
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: 'podcast-demo-episodes',
+        name: "podcast-episodes",
+        path: "content/episodes"
+      }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "podcast-demo-episodes",
         path: `${__dirname}/content/episodes`
       }
     },
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: 'podcast-fragments',
-        path: 'content/fragments'
+        name: "podcast-fragments",
+        path: "content/fragments"
       }
     },
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: 'podcast-demo-fragments',
+        name: "podcast-demo-fragments",
         path: `${__dirname}/content/fragments`
       }
     },
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: 'podcast-assets',
-        path: 'content/assets'
+        name: "podcast-assets",
+        path: "content/assets"
       }
     },
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: 'podcast-demo-assets',
+        name: "podcast-demo-assets",
         path: `${__dirname}/content/assets`
       }
     },
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     {
-      resolve: 'gatsby-plugin-typography',
+      resolve: "gatsby-plugin-typography",
       options: {
         pathToConfigModule: require.resolve(`./src/utils/typography`)
       }
     },
     {
-      resolve: 'gatsby-plugin-mdx',
+      resolve: "gatsby-plugin-mdx",
       options: {
         defaultLayouts: {
-          default: require.resolve('./src/components/Layout.js')
+          default: require.resolve("./src/components/Layout.js")
         }
       }
     },
     {
-      resolve: 'gatsby-plugin-page-creator',
+      resolve: "gatsby-plugin-page-creator",
       options: {
         path: `${__dirname}/src/pages`
       }
     }
   ]
-};
+});

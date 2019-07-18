@@ -1,84 +1,83 @@
 import React, { Fragment } from "react";
-import { Link, StaticQuery, graphql } from "gatsby";
+import { Link, useStaticQuery, graphql } from "gatsby";
 
 const query = graphql`
   query getEpisodes {
-    allMdx(
-      sort: { fields: [frontmatter___date, frontmatter___title], order: DESC }
-      filter: {
-        fields: {
-          source: { in: ["podcast-demo-episodes", "podcast-episodes"] }
-          slug: { ne: null }
-        }
-      }
-      limit: 1000
-    ) {
-      edges {
-        node {
-          id
-          frontmatter {
-            title
-            date(formatString: "MMMM DD, YYYY")
-            time
-            description
-          }
-          fields {
-            slug
-          }
+    allRssFeedItem {
+      nodes {
+        id
+        slug
+        title
+        date: isoDate(formatString: "MMMM DD, YYYY")
+        description: content
+        excerpt
+        link
+        duration
+        itunes {
+          duration
         }
       }
     }
   }
 `;
 
-const PostTeasers = () => (
-  <StaticQuery
-    query={query}
-    render={data => {
-      const {
-        allMdx: { edges: episodes }
-      } = data;
-      return (
-        <Fragment>
-          {episodes.map(({ node: episode }) => {
-            const {
-              frontmatter: { title, date, time, description },
-              fields: { slug }
-            } = episode;
-            return (
-              <div
-                style={{
-                  textAlign: "left"
-                }}
-                key={episode.id}
-              >
-                <h3
-                  style={{
-                    marginTop: "1rem",
-                    marginBottom: "0.4375rem",
-                    textDecoration: "underline"
-                  }}
-                >
-                  <Link style={{ boxShadow: "none" }} to={`/${slug}`}>
-                    {title}
-                  </Link>
-                </h3>
-                <small>
-                  {date}
-                  {` • ${time} min 🎧`}
-                </small>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: description
-                  }}
-                />
-              </div>
-            );
-          })}
-        </Fragment>
-      );
-    }}
-  />
-);
+const durationToMinutes = durationInSeconds => {
+  return Math.floor(durationInSeconds / 60);
+};
+
+// hackity hack. this extracts the first paragraph from the description
+const extractFirstParagraph = html => {
+  return html.match(/<p>(.*?)<\/p>/)[0];
+};
+
+const PostTeasers = () => {
+  const data = useStaticQuery(query);
+  const episodes = data.allRssFeedItem.nodes;
+
+  return (
+    <Fragment>
+      {episodes.map(episode => {
+        const {
+          id,
+          slug,
+          title,
+          date,
+          description,
+          itunes: { duration }
+        } = episode;
+        const formattedDescription = extractFirstParagraph(description);
+        return (
+          <div
+            style={{
+              textAlign: "left"
+            }}
+            key={id}
+          >
+            <h3
+              style={{
+                marginTop: "1rem",
+                marginBottom: "0.4375rem",
+                textDecoration: "underline"
+              }}
+            >
+              <Link style={{ boxShadow: "none" }} to={`/${slug}`}>
+                {title}
+              </Link>
+            </h3>
+            <small>
+              {date}
+              {` • ${durationToMinutes(duration)} min 🎧`}
+            </small>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: formattedDescription
+              }}
+            />
+          </div>
+        );
+      })}
+    </Fragment>
+  );
+};
 
 export default PostTeasers;

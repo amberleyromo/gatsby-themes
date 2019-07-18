@@ -1,7 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const Promise = require("bluebird");
-const _ = require("lodash");
 
 exports.onPreBootstrap = ({ reporter }) => {
   const dirs = [
@@ -19,107 +17,61 @@ exports.onPreBootstrap = ({ reporter }) => {
   });
 };
 
-exports.createPages = ({ graphql, actions }) => {
+exports.createPages = async function createPages({ graphql, actions }) {
   const { createPage } = actions;
-
-  return new Promise((resolve, reject) => {
-    const episodePage = require.resolve("./src/templates/episode-page.js");
-    resolve(
-      graphql(
-        `
-          {
-            allMdx(
-              sort: {
-                fields: [frontmatter___date, frontmatter___title]
-                order: DESC
-              }
-              filter: {
-                fields: {
-                  source: { in: ["podcast-demo-episodes", "podcast-episodes"] }
-                  slug: { ne: null }
-                }
-              }
-              limit: 1000
-            ) {
-              edges {
-                node {
-                  fields {
-                    slug
-                  }
-                  frontmatter {
-                    title
-                  }
-                }
-              }
-            }
+  const rssItemPage = require.resolve("./src/templates/episode-page.js");
+  const result = await graphql(
+    `
+      {
+        allRssFeedItem(sort: { fields: [pubDate], order: DESC }) {
+          nodes {
+            title
+            slug
           }
-        `
-      ).then(result => {
-        if (result.errors) {
-          console.log(result.errors);
-          reject(result.errors);
         }
+      }
+    `
+  ).then(response => {
+    if (response.errors) {
+      throw new Error(response.errors);
+    }
+    return response;
+  });
 
-        // Create episode pages.
-        const episodes = result.data.allMdx.edges;
-        _.each(episodes, (episode, index) => {
-          const previous =
-            index === episodes.length - 1 ? null : episodes[index + 1].node;
-          const next = index === 0 ? null : episodes[index - 1].node;
+  // Create item pages.
+  const rssItems = result.data.allRssFeedItem.nodes;
+  rssItems.forEach((rssItem, index) => {
+    const previous =
+      index === rssItems.length - 1 ? null : rssItems[index + 1].node;
+    const next = index === 0 ? null : rssItems[index - 1].node;
 
-          createPage({
-            path: episode.node.fields.slug,
-            component: episodePage,
-            context: {
-              slug: episode.node.fields.slug,
-              previous,
-              next
-            }
-          });
-        });
-      })
-    );
+    createPage({
+      path: rssItem.slug,
+      component: rssItemPage,
+      context: {
+        slug: rssItem.slug,
+        previous,
+        next
+      }
+    });
   });
 };
 
-let userCreatedOwnEpisodes = false;
+// Connect mdx notes/transcripts to episode
+exports.onCreateNode = async ({ node, actions, getNodesByType }) => {
+  const { createParentChildLink } = actions;
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions;
+  if (node.internal.type !== `Mdx`) {
+    return;
+  }
 
-  if (node.internal.type === `Mdx`) {
-    // create source field
-    const fileNode = getNode(node.parent);
+  const rssItemNodes = getNodesByType(`rssFeedItem`);
 
-    const source = fileNode.sourceInstanceName;
+  const filtered = rssItemNodes.find(rssItemNode => {
+    return rssItemNode.link === node.frontmatter.boop;
+  });
 
-    createNodeField({
-      node,
-      name: `source`,
-      value: source
-    });
-
-    const eligibleEpisodeSources = [
-      "podcast-demo-episodes",
-      "podcast-episodes"
-    ];
-
-    if (eligibleEpisodeSources.includes(source)) {
-      if (source === "podcast-episodes") {
-        userCreatedOwnEpisodes = true;
-      }
-
-      if (userCreatedOwnEpisodes && source === "podcast-demo-episodes") {
-        return;
-      }
-
-      // create slug for episode pages
-      const value = path.parse(node.fileAbsolutePath).name;
-      createNodeField({
-        name: `slug`,
-        node,
-        value
-      });
-    }
+  if (filtered) {
+    createParentChildLink({ parent: filtered, child: node });
   }
 };

@@ -7,11 +7,11 @@
   "private": true,
   "scripts": {
     "nuke": "gatsby clean && yarn develop",
-    "develop": "GATSBY_GRAPHQL_IDE=playground gatsby develop",
+    "develop": "gatsby develop",
     "build": "gatsby build"
   },
   "dependencies": {
-    "gatsby": "^2.1.38",
+    "gatsby": "^2.13.25",
     "gatsby-theme-podcast": "*",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"

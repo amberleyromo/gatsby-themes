@@ -160,7 +160,7 @@ export default class Player extends React.Component {
 
   playPause = () => {
     this.setState({ playing: !this.audio.paused });
-    const method = this.audio.paused ? "add" : "remove";
+    // const method = this.audio.paused ? "add" : "remove";
     // This controls the active episode indicator
     // document.querySelector('.bars').classList[method]('bars--paused'); // 💩
   };
@@ -261,9 +261,7 @@ export default class Player extends React.Component {
               style={{ width: `${progressTime}%` }}
             />
           </div>
-          <h3 className="player__title">
-            Playing: {show.displayNumber}: {show.title}
-          </h3>
+          <h3 className="player__title">Playing: {show.title}</h3>
           <div
             className="player__tooltip"
             style={{

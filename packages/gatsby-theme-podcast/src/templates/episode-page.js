@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, graphql } from "gatsby";
-import get from "lodash/get";
+import get from "lodash.get";
 import PodcastPlayer from "syntax-podcast-player";
 
 import { MDXRenderer } from "gatsby-plugin-mdx";
@@ -11,35 +11,37 @@ import SEO from "../components/SEO";
 import { rhythm } from "../utils/typography";
 
 import "./player-styles.css";
-class EpisodePageTemplate extends React.Component {
+class RssItemPageTemplate extends React.Component {
   render() {
-    const episode = this.props.data.mdx;
+    const rssItem = this.props.data.rssFeedItem;
     const siteMetadata = get(this.props, "data.site.siteMetadata");
     const { previous, next, slug } = this.props.pageContext;
+    // @TODO this won't do anything currently -- no corresponding .md file
     const editUrl = `https://github.com/${siteMetadata.gitOrg}/${
       siteMetadata.siteUrl
     }/edit/master/src/pages/${slug.replace(/\//g, "")}.md`;
     let discussUrl = `https://twitter.com/search?q=${encodeURIComponent(
-      `${siteMetadata.siteUrl}${slug}`
+      `${siteMetadata.siteUrl}/${slug}/`
     )}`;
+    // "trailer" has a "null" value
+    let itemNumber = rssItem.itunes.episode || "0";
     return (
       <Layout location={this.props.location} title={siteMetadata.title}>
         <SEO
-          title={episode.frontmatter.title}
-          description={episode.frontmatter.description}
-          slug={episode.fields.slug}
-          embedUrl={episode.frontmatter.embedUrl}
+          title={rssItem.title}
+          description={rssItem.excerpt}
+          slug={rssItem.slug}
+          embedUrl={rssItem.audio.url}
         />
 
         <Support />
 
         <PodcastPlayer
           show={{
-            number: "1",
-            displayNumber: "1",
-            title: "Testing",
-            url:
-              "https://dts.podtrac.com/redirect.mp3/cdn.simplecast.com/audio/219f49/219f4989-7b89-413b-8f22-f290d553de6a/c302abae-9279-4ea1-94ab-f6f2ab9b2fca/11_Cities_tc.mp3"
+            number: itemNumber,
+            displayNumber: itemNumber,
+            title: rssItem.title,
+            url: rssItem.audio.url
           }}
         />
 
@@ -55,12 +57,16 @@ class EpisodePageTemplate extends React.Component {
               marginTop: rhythm(0.25)
             }}
           >
-            {episode.frontmatter.title}
+            {rssItem.title}
           </h2>
 
-          <blockquote>{episode.frontmatter.description}</blockquote>
+          <blockquote
+            dangerouslySetInnerHTML={{
+              __html: rssItem.excerpt
+            }}
+          />
 
-          <MDXRenderer>{episode.body}</MDXRenderer>
+          <MDXRenderer>{rssItem.childMdx.body}</MDXRenderer>
 
           <p>
             <a href={discussUrl} target="_blank" rel="noopener noreferrer">
@@ -89,15 +95,15 @@ class EpisodePageTemplate extends React.Component {
           >
             <li>
               {previous && (
-                <Link to={previous.fields.slug} rel="prev">
-                  ← {previous.frontmatter.title}
+                <Link to={previous.slug} rel="prev">
+                  ← {previous.title}
                 </Link>
               )}
             </li>
             <li>
               {next && (
-                <Link to={next.fields.slug} rel="next">
-                  {next.frontmatter.title} →
+                <Link to={next.slug} rel="next">
+                  {next.title} →
                 </Link>
               )}
             </li>
@@ -109,10 +115,10 @@ class EpisodePageTemplate extends React.Component {
   }
 }
 
-export default EpisodePageTemplate;
+export default RssItemPageTemplate;
 
 export const query = graphql`
-  query EpisodeBySlug($slug: String!) {
+  query RssItemBySlug($slug: String!) {
     site {
       siteMetadata {
         title
@@ -121,20 +127,22 @@ export const query = graphql`
         siteUrl
       }
     }
-    mdx(fields: { slug: { eq: $slug } }) {
+    rssFeedItem(slug: { eq: $slug }) {
       id
-      body
-      timeToRead
-      frontmatter {
-        title
-        time
-        date(formatString: "MMMM DD, YYYY")
-        description
-        episodeLink
-        embedUrl
+      title
+      isoDate(formatString: "MMMM DD, YYYY")
+      content
+      itunes {
+        episode
       }
-      fields {
-        slug
+      link
+      audio: enclosure {
+        url
+      }
+      excerpt
+      duration
+      childMdx {
+        body
       }
     }
   }

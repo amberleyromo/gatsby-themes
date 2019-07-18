@@ -37,6 +37,15 @@ const generateRSSItemSlug = title => {
   );
 };
 
+const durationToMinutes = durationInSeconds => {
+  return Math.floor(durationInSeconds / 60);
+};
+
+// hackity hack. this extracts the first paragraph from the description
+const extractFirstParagraph = html => {
+  return html.match(/<p>(.*?)<\/p>/)[0];
+};
+
 async function sourceNodes({ actions }, { rssSource = "" }) {
   if (!rssSource) {
     console.log(`gatsby-theme-podcast requires an RSS feed`);
@@ -58,7 +67,6 @@ async function sourceNodes({ actions }, { rssSource = "" }) {
     link,
     imageUrl: image.url,
     parent: null
-    // children: childrenNodes.map(node => node.id)
   };
 
   feedInfo.internal = {
@@ -72,13 +80,17 @@ async function sourceNodes({ actions }, { rssSource = "" }) {
   // Prepare RSS item nodes
   const prepareRssItemNodes = items.map(rssItem => {
     let slug = generateRSSItemSlug(rssItem.title);
+    let excerpt = extractFirstParagraph(rssItem.content);
+    let duration = durationToMinutes(rssItem.itunes.duration);
     const node = Object.assign({}, rssItem, {
       id: rssItem.link,
       title: rssItem.title,
-      description: rssItem.description,
+      content: rssItem.content,
       link: rssItem.link,
-      slug
-      // parent: null,
+      excerpt,
+      duration,
+      slug,
+      parent: null
     });
     node.internal = {
       type: "rssFeedItem",
@@ -94,32 +106,14 @@ exports.sourceNodes = sourceNodes;
 
 exports.createPages = async function createPages({ graphql, actions }) {
   const { createPage } = actions;
-  const episodePage = require.resolve("./src/templates/episode-page.js");
+  const rssItemPage = require.resolve("./src/templates/episode-page.js");
   const result = await graphql(
     `
       {
-        allMdx(
-          sort: {
-            fields: [frontmatter___date, frontmatter___title]
-            order: DESC
-          }
-          filter: {
-            fields: {
-              source: { in: ["podcast-demo-episodes", "podcast-episodes"] }
-              slug: { ne: null }
-            }
-          }
-          limit: 1000
-        ) {
-          edges {
-            node {
-              fields {
-                slug
-              }
-              frontmatter {
-                title
-              }
-            }
+        allRssFeedItem(sort: { fields: [pubDate], order: DESC }) {
+          nodes {
+            title
+            slug
           }
         }
       }
@@ -131,18 +125,18 @@ exports.createPages = async function createPages({ graphql, actions }) {
     return response;
   });
 
-  // Create episode pages.
-  const episodes = result.data.allMdx.edges;
-  episodes.forEach((episode, index) => {
+  // Create item pages.
+  const rssItems = result.data.allRssFeedItem.nodes;
+  rssItems.forEach((rssItem, index) => {
     const previous =
-      index === episodes.length - 1 ? null : episodes[index + 1].node;
-    const next = index === 0 ? null : episodes[index - 1].node;
+      index === rssItems.length - 1 ? null : rssItems[index + 1].node;
+    const next = index === 0 ? null : rssItems[index - 1].node;
 
     createPage({
-      path: episode.node.fields.slug,
-      component: episodePage,
+      path: rssItem.slug,
+      component: rssItemPage,
       context: {
-        slug: episode.node.fields.slug,
+        slug: rssItem.slug,
         previous,
         next
       }

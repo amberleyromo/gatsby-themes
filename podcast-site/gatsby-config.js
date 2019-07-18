@@ -1,5 +1,11 @@
 module.exports = {
   siteMetadata: {
+    title: "Fullstack Health",
+    author: "Amberley Romo & Kurt Kemple",
+    description:
+      "A podcast about physical and mental health and the tech industry.",
+    gitOrg: "amberleyromo",
+    siteUrl: "https://fullstack.health",
     social: {
       twitter: "@FullstackHealth"
     },

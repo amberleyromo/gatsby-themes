@@ -19,7 +19,6 @@ const query = graphql`
 const Sources = () => {
   const data = useStaticQuery(query);
   const metaData = data.site.siteMetadata;
-  console.log(`metaData.sources`, metaData.sources);
   const lastSource = metaData.sources.length - 1;
   return (
     <p style={{ textAlign: "center" }}>

@@ -26,28 +26,7 @@ const createContentDigest = obj =>
     .update(JSON.stringify(obj))
     .digest("hex");
 
-const createChildren = (items, parentId, createNode) => {
-  const childIds = [];
-  items.forEach(item => {
-    childIds.push(item.link);
-    const node = Object.assign({}, item, {
-      id: item.link,
-      title: item.title,
-      description: item.description,
-      link: item.link,
-      parent: parentId,
-      children: []
-    });
-    node.internal = {
-      type: "rssFeedItem",
-      contentDigest: createContentDigest(node)
-    };
-    createNode(node);
-  });
-  return childIds;
-};
-
-const generateEpisodeSlug = title => {
+const generateRSSItemSlug = title => {
   return (
     title
       // remove non-alphanumeric characters, except spaces
@@ -69,26 +48,46 @@ async function sourceNodes({ actions }, { rssSource = "" }) {
   if (!data) {
     return;
   }
+
+  // Create nodes for top-level RSS feed info
   const { title, description, link, image, items } = data;
-  let slug = generateEpisodeSlug(title);
-  const childrenIds = createChildren(items, link, createNode);
-  const feedStory = {
+  const feedInfo = {
     id: link,
-    // slug, // adding new fields breaks things?
     title,
     description,
     link,
-    // imageUrl: image.url, // adding new fields breaks things?
-    parent: null,
-    children: childrenIds
+    imageUrl: image.url,
+    parent: null
+    // children: childrenNodes.map(node => node.id)
   };
 
-  feedStory.internal = {
-    type: "rssFeed",
-    contentDigest: createContentDigest(feedStory)
+  feedInfo.internal = {
+    type: "rssFeedInfo",
+    contentDigest: createContentDigest(feedInfo)
   };
 
-  createNode(feedStory);
+  createNode(feedInfo);
+
+  // Create nodes for RSS items
+  // Prepare RSS item nodes
+  const prepareRssItemNodes = items.map(rssItem => {
+    let slug = generateRSSItemSlug(rssItem.title);
+    const node = Object.assign({}, rssItem, {
+      id: rssItem.link,
+      title: rssItem.title,
+      description: rssItem.description,
+      link: rssItem.link,
+      slug
+      // parent: null,
+    });
+    node.internal = {
+      type: "rssFeedItem",
+      contentDigest: createContentDigest(node)
+    };
+    return node;
+  });
+  // Create RSS item nodes
+  prepareRssItemNodes.forEach(rssItemNode => createNode(rssItemNode));
 }
 
 exports.sourceNodes = sourceNodes;

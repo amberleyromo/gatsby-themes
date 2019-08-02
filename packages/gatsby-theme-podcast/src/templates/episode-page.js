@@ -112,9 +112,13 @@ class RssItemPageTemplate extends React.Component {
             }}
           />
 
-          <MDXProvider components={components}>
-            <MDXRenderer>{rssItem.childMdx.body}</MDXRenderer>
-          </MDXProvider>
+          {
+            rssItem.childMdx ?
+              <MDXProvider components={components}>
+                <MDXRenderer>{rssItem.childMdx.body}</MDXRenderer>
+              </MDXProvider>
+            : null
+          }
 
           <p>
             <a href={discussUrl} target="_blank" rel="noopener noreferrer">

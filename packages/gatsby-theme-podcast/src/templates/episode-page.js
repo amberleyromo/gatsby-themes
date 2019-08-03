@@ -15,7 +15,6 @@ import "./player-styles.css";
 import "./transcript.css";
 
 const TranscriptParagraph = props => {
-  let hasTimestamp = false;
   const children = React.Children.toArray(props.children).map((child, i) => {
     if (i === 0 && typeof child === "string") {
       const timestamp = child.match(/^\[(\d\d):(\d\d)(?::(\d\d))?\]/);
@@ -30,7 +29,6 @@ const TranscriptParagraph = props => {
         } else {
           seconds = Number(timestamp[1]) * 60 + Number(timestamp[2]);
         }
-        hasTimestamp = seconds;
 
         return (
           <a
@@ -47,7 +45,7 @@ const TranscriptParagraph = props => {
   });
 
   return (
-    <p id={hasTimestamp ? `playFrom=${hasTimestamp}` : ''}>
+    <p>
       {children}
     </p>
   );

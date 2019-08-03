@@ -3,6 +3,7 @@ import { Link, graphql } from "gatsby";
 import get from "lodash.get";
 import PodcastPlayer from "syntax-podcast-player";
 
+import { MDXProvider } from '@mdx-js/react'
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import Layout from "../components/Layout";
 import Support from "../components/Support";
@@ -11,6 +12,49 @@ import SEO from "../components/SEO";
 import { rhythm } from "../utils/typography";
 
 import "./player-styles.css";
+import "./transcript.css";
+
+const TranscriptParagraph = props => {
+  const children = React.Children.toArray(props.children).map((child, i) => {
+    if (i === 0 && typeof child === "string") {
+      const timestamp = child.match(/^\[(\d\d):(\d\d)(?::(\d\d))?\]/);
+      if (timestamp) {
+
+        let seconds = 0;
+        if (timestamp[3]) {
+          seconds =
+            Number(timestamp[1]) * 3600 +
+            Number(timestamp[2]) * 60 +
+            Number(timestamp[3]);
+        } else {
+          seconds = Number(timestamp[1]) * 60 + Number(timestamp[2]);
+        }
+
+        return (
+          <a
+            key={child}
+            className="timestamp"
+            href={`#playFrom=${seconds}`}
+          >
+            {child}
+          </a>
+        );
+      }
+    }
+    return child;
+  });
+
+  return (
+    <p>
+      {children}
+    </p>
+  );
+};
+
+const components = {
+  p: TranscriptParagraph,
+}
+
 class RssItemPageTemplate extends React.Component {
   render() {
     const rssItem = this.props.data.rssFeedItem;
@@ -66,7 +110,13 @@ class RssItemPageTemplate extends React.Component {
             }}
           />
 
-          <MDXRenderer>{rssItem.childMdx.body}</MDXRenderer>
+          {
+            rssItem.childMdx ?
+              <MDXProvider components={components}>
+                <MDXRenderer>{rssItem.childMdx.body}</MDXRenderer>
+              </MDXProvider>
+            : null
+          }
 
           <p>
             <a href={discussUrl} target="_blank" rel="noopener noreferrer">
